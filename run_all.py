@@ -27,6 +27,7 @@ from src.cache import GENERATION_CACHE  # noqa: E402
 from src.chunking import fixed_size_chunks, load_documents, sentence_chunks  # noqa: E402
 from src.config import (  # noqa: E402
     CALIBRATION_FILE,
+    KB_DIR,
     COLLECTION_FIXED,
     COLLECTION_SENTENCE,
     MOCK_LLM,
@@ -309,7 +310,18 @@ def part3() -> str:
                  "instruction is retried once on the next working day and then lapses with "
                  "a failure charge of INR 200 plus taxes."),
     })
-    body += f"POST /add-document -> {add.status_code} {add.json()}\n\n"
+    body += f"POST /add-document -> {add.status_code} {add.json()}\n"
+    verify = client.post("/ask", json={
+        "query": "What happens if a standing instruction fails on the due date?",
+        "session_id": "add-doc-verify"})
+    body += ("verified the new document is retrievable: "
+             f"{verify.json()['response']['answer'][:160]}\n")
+    # Housekeeping: the demo document is removed so the repository stays at the 12
+    # authored documents the README reports, and so a re-run reproduces the same
+    # dataset, calibration and precision/recall numbers from a clean checkout.
+    demo_doc = KB_DIR / "kb13_standing_instructions.md"
+    demo_doc.unlink(missing_ok=True)
+    body += f"demo document removed after the test: {not demo_doc.exists()}\n\n"
 
     with client.websocket_connect("/ws/chat") as websocket:
         ready = websocket.receive_json()

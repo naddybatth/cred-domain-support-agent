@@ -89,7 +89,7 @@ RUNTIME LAYER - per-request token / cost budget
 ```
 query: What is the average monthly balance requirement in a metro branch?
 
-CALL 1 (cold)  cache_hit=False  wall=103.6 ms  model+tool calls made=4
+CALL 1 (cold)  cache_hit=False  wall=94.5 ms  model+tool calls made=4
 CALL 2 (warm)  cache_hit=True  wall=4.5 ms  model+tool calls made=0
 
 cache stats: {'hits': 1, 'misses': 1, 'saved_llm_or_tool_calls': 1, 'hit_rate': 0.5}

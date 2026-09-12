@@ -43,7 +43,7 @@ First 5 records:
 ## Task 2 - knowledge base
 
 
-### 13 authored documents
+### 12 authored documents
 
 ```
 kb01_loan_eligibility         153 words  Loan Eligibility Criteria by Loan Type
@@ -58,7 +58,6 @@ kb09_minimum_balance          154 words  Minimum Balance Requirements
 kb10_credit_score_factors     142 words  Credit Score Impact Factors
 kb11_joint_account            143 words  Joint Account Rules
 kb12_nri_account              154 words  NRI Account Eligibility
-kb13_standing_instructions     46 words  Standing Instruction Rules
 ```
 
 
@@ -68,10 +67,10 @@ kb13_standing_instructions     46 words  Standing Instruction Rules
 ### index build
 
 ```
-fixed_overlap chunks produced : 37
-sentence chunks produced      : 49
-collection kb_fixed_overlap     count after upsert: 37
-collection kb_sentence          count after upsert: 49
+fixed_overlap chunks produced : 36
+sentence chunks produced      : 48
+collection kb_fixed_overlap     count after upsert: 36
+collection kb_sentence          count after upsert: 48
 
 sanity query 'foreclosure charge on a personal loan':
   kb_fixed_overlap

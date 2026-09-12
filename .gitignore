@@ -8,3 +8,4 @@ chroma_store/
 .cache/
 logs/requests.jsonl
 .DS_Store
+data/kb/kb13_standing_instructions.md

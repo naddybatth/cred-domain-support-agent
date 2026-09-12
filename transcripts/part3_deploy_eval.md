@@ -10,8 +10,8 @@ GET /health -> 200 {'status': 'ok', 'mock_llm': True, 'embedding_backend': 'hash
 
 POST /ask -> 200
 {
-  "trace_id": "2543e640edbe4fb9",
-  "latency_ms": 110.385,
+  "trace_id": "edaafe17f3a14af7",
+  "latency_ms": 122.978,
   "response": {
     "answer": "A fixed-rate Personal Loan attracts a foreclosure charge of 4 percent of the outstanding principal if closed within the first twelve months, 3 percent between months thirteen and twenty-four, and 2 percent thereafter. A floating-rate loan taken by an individual borrower for a non-business purpose carries no foreclosure or part-prepayment charge at any point in the tenure. Business Loans carry a flat foreclosure charge of 4 percent of the outstanding principal unless the closure is funded from the borrower's own verified sources.",
     "answer_type": "policy",
@@ -35,9 +35,11 @@ POST /ask -> 200
         "similarity": 0.247
 
 
-POST /add-document -> 200 {'trace_id': 'd777aab43fb4424a', 'doc_id': 'kb13_standing_instructions', 'chunks_indexed_fixed': 37, 'chunks_indexed_sentence': 49}
+POST /add-document -> 200 {'trace_id': 'cbf3e13afe3146f5', 'doc_id': 'kb13_standing_instructions', 'chunks_indexed_fixed': 37, 'chunks_indexed_sentence': 49}
+verified the new document is retrievable: A standing instruction may be registered for any recurring debit and is executed on the due date if the balance is sufficient. A failed standing instruction is 
+demo document removed after the test: True
 
-WS /ws/chat connect -> ready session=ws-41fd9929c10449ad
+WS /ws/chat connect -> ready session=ws-a0096bf7ab4a4595
 WS turn 1 -> record_id=LN-20260004 status=Rejected
 WS turn 2 (multi-turn, same socket) -> record_id=LN-20260004
 WS client disconnected mid-conversation (context manager exit).
@@ -51,12 +53,12 @@ server still serving other clients after the disconnect: GET /health -> 200, POS
 ### logs/requests.jsonl
 
 ```
-{"answer_type": "refusal", "budget": {"estimated_cost_inr": 0.00165, "max_request_tokens": 512, "request_tokens": 11}, "cache_hit": false, "endpoint": "guard-demo", "guardrails": ["output_groundedness", "low_retrieval_confidence", "ungrounded_answer"], "latency_ms": 115.177, "level": "INFO", "llm_calls": 30, "record_id": null, "refused": true, "request": "What is the best recipe for hyderabadi biryani?", "review_approved": null, "service": "cred-domain-support-agent", "session_id": "guard", "status": "ok", "top_similarity": 0.041, "trace_id": "0f816cd8fdb84df0", "ts": 1789227750.778}
-{"answer_type": "policy", "budget": {"estimated_cost_inr": 0.00225, "max_request_tokens": 512, "request_tokens": 15}, "cache_hit": false, "endpoint": "POST /ask", "guardrails": [], "latency_ms": 110.385, "level": "INFO", "llm_calls": 34, "record_id": null, "refused": false, "request": "What is the foreclosure charge on a fixed rate personal loan?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "http-demo", "status": "ok", "top_similarity": 0.481, "trace_id": "2543e640edbe4fb9", "ts": 1789227750.918}
-{"collection_sizes": {"kb_fixed_overlap": 37, "kb_sentence": 49}, "doc_id": "kb13_standing_instructions", "endpoint": "POST /add-document", "latency_ms": 165.285, "level": "INFO", "request": "Standing Instruction Rules", "service": "cred-domain-support-agent", "session_id": "default", "status": "ok", "trace_id": "d777aab43fb4424a", "ts": 1789227751.033}
-{"answer_type": "record", "budget": {"estimated_cost_inr": 0.00165, "max_request_tokens": 512, "request_tokens": 11}, "cache_hit": false, "endpoint": "WS /ws/chat", "guardrails": [], "latency_ms": 143.383, "level": "INFO", "llm_calls": 39, "record_id": "LN-20260004", "refused": false, "request": "What is the status of application LN-20260004?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "ws-41fd9929c10449ad", "status": "ok", "top_similarity": 0.0529, "trace_id": "92ede53354ab4613", "ts": 1789227751.206}
-{"answer_type": "record", "budget": {"estimated_cost_inr": 0.00165, "max_request_tokens": 512, "request_tokens": 11}, "cache_hit": false, "endpoint": "WS /ws/chat", "guardrails": [], "latency_ms": 121.171, "level": "INFO", "llm_calls": 44, "record_id": "LN-20260004", "refused": false, "request": "Is that application flagged for fraud review?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "ws-41fd9929c10449ad", "status": "ok", "top_similarity": 0.0642, "trace_id": "99281675da0549a5", "ts": 1789227751.351}
-{"answer_type": "refusal", "budget": {"estimated_cost_inr": 0.0009, "max_request_tokens": 512, "request_tokens": 6}, "cache_hit": false, "endpoint": "POST /ask", "guardrails": ["output_groundedness", "low_retrieval_confidence", "ungrounded_answer"], "latency_ms": 92.895, "level": "INFO", "llm_calls": 47, "record_id": null, "refused": true, "request": "What is the EMI formula?", "review_approved": null, "service": "cred-domain-support-agent", "session_id": "after-disconnect", "status": "ok", "top_similarity": 0.1316, "trace_id": "426b15126ab74131", "ts": 1789227751.48}
+{"answer_type": "policy", "budget": {"estimated_cost_inr": 0.00225, "max_request_tokens": 512, "request_tokens": 15}, "cache_hit": false, "endpoint": "POST /ask", "guardrails": [], "latency_ms": 122.978, "level": "INFO", "llm_calls": 34, "record_id": null, "refused": false, "request": "What is the foreclosure charge on a fixed rate personal loan?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "http-demo", "status": "ok", "top_similarity": 0.481, "trace_id": "edaafe17f3a14af7", "ts": 1789227828.347}
+{"collection_sizes": {"kb_fixed_overlap": 37, "kb_sentence": 49}, "doc_id": "kb13_standing_instructions", "endpoint": "POST /add-document", "latency_ms": 136.788, "level": "INFO", "request": "Standing Instruction Rules", "service": "cred-domain-support-agent", "session_id": "default", "status": "ok", "trace_id": "cbf3e13afe3146f5", "ts": 1789227828.476}
+{"answer_type": "policy", "budget": {"estimated_cost_inr": 0.00225, "max_request_tokens": 512, "request_tokens": 15}, "cache_hit": false, "endpoint": "POST /ask", "guardrails": [], "latency_ms": 112.137, "level": "INFO", "llm_calls": 38, "record_id": null, "refused": false, "request": "What happens if a standing instruction fails on the due date?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "add-doc-verify", "status": "ok", "top_similarity": 0.3333, "trace_id": "b7b692f8f935467e", "ts": 1789227828.619}
+{"answer_type": "record", "budget": {"estimated_cost_inr": 0.00165, "max_request_tokens": 512, "request_tokens": 11}, "cache_hit": false, "endpoint": "WS /ws/chat", "guardrails": [], "latency_ms": 139.752, "level": "INFO", "llm_calls": 43, "record_id": "LN-20260004", "refused": false, "request": "What is the status of application LN-20260004?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "ws-a0096bf7ab4a4595", "status": "ok", "top_similarity": 0.0529, "trace_id": "8ff89628dab74c45", "ts": 1789227828.739}
+{"answer_type": "record", "budget": {"estimated_cost_inr": 0.00165, "max_request_tokens": 512, "request_tokens": 11}, "cache_hit": false, "endpoint": "WS /ws/chat", "guardrails": [], "latency_ms": 137.497, "level": "INFO", "llm_calls": 48, "record_id": "LN-20260004", "refused": false, "request": "Is that application flagged for fraud review?", "review_approved": true, "service": "cred-domain-support-agent", "session_id": "ws-a0096bf7ab4a4595", "status": "ok", "top_similarity": 0.0642, "trace_id": "3f1c5263678b45a0", "ts": 1789227828.88}
+{"answer_type": "refusal", "budget": {"estimated_cost_inr": 0.0009, "max_request_tokens": 512, "request_tokens": 6}, "cache_hit": false, "endpoint": "POST /ask", "guardrails": ["output_groundedness", "low_retrieval_confidence", "ungrounded_answer"], "latency_ms": 99.528, "level": "INFO", "llm_calls": 51, "record_id": null, "refused": true, "request": "What is the EMI formula?", "review_approved": null, "service": "cred-domain-support-agent", "session_id": "after-disconnect", "status": "ok", "top_similarity": 0.1316, "trace_id": "c6611ad34e884583", "ts": 1789227829.027}
 
 PII control: the request field is the MASKED text. Proof - a PAN was posted to /ask and the log line below contains [PAN_REDACTED], never the PAN itself.
 {
@@ -73,9 +75,9 @@ PII control: the request field is the MASKED text. Proof - a PAN was posted to /
     "low_retrieval_confidence",
     "ungrounded_answer"
   ],
-  "latency_ms": 105.541,
+  "latency_ms": 96.658,
   "level": "INFO",
-  "llm_calls": 50,
+  "llm_calls": 54,
   "record_id": null,
   "refused": true,
   "request": "My PAN is [PAN_REDACTED] - what is the EMI formula?",
@@ -84,8 +86,8 @@ PII control: the request field is the MASKED text. Proof - a PAN was posted to /
   "session_id": "pii-log-demo",
   "status": "ok",
   "top_similarity": 0.0861,
-  "trace_id": "5614a0d9cc0e4de3",
-  "ts": 1789227751.579
+  "trace_id": "cd3cc9fb57f84e77",
+  "ts": 1789227829.131
 }
 
 raw PAN present in log line? False

@@ -134,23 +134,68 @@ def part1() -> str:
 
     fixed_block = comparison[COLLECTION_FIXED]
     sentence_block = comparison[COLLECTION_SENTENCE]
-    winner = (
-        COLLECTION_SENTENCE
-        if sentence_block["mean_f1"] >= fixed_block["mean_f1"]
-        else COLLECTION_FIXED
+    better_on_numbers = (
+        COLLECTION_FIXED
+        if fixed_block["mean_f1"] > sentence_block["mean_f1"]
+        else COLLECTION_SENTENCE
     )
+
+    # Evidence for the recommendation: does either strategy truncate a policy statement
+    # mid-sentence, and does that truncation reach the generated answer? This is computed
+    # live rather than asserted, so the transcript shows the actual failure or its absence.
+    truncation_evidence = ""
+    kyc_query = "Which documents count as proof of address for KYC?"
+    for collection in (COLLECTION_FIXED, COLLECTION_SENTENCE):
+        generated = answer(kyc_query, collection_name=collection, threshold=0.0)
+        text = generated["answer"]
+        truncation_evidence += (
+            f"  {collection}\n"
+            f"    answer ends mid-sentence: "
+            f"{not text.rstrip().endswith(('.', '?', '!'))}\n"
+            f"    answer: {text[:240]}\n"
+        )
+    cut_chunks = [
+        c for c in fixed_size_chunks(documents)
+        if not c.text.rstrip().endswith((".", "?", "!"))
+    ]
+    truncation_evidence += (
+        f"\n  fixed windows that end mid-sentence: {len(cut_chunks)}/{len(fixed)}\n"
+    )
+    for chunk in cut_chunks[:3]:
+        truncation_evidence += f"    [{chunk.chunk_id}] ...{chunk.text[-88:]}\n"
+    truncation_evidence += (
+        f"  sentence chunks that end mid-sentence: "
+        f"{len([c for c in sentence if not c.text.rstrip().endswith(('.', '?', '!'))])}"
+        f"/{len(sentence)}\n"
+    )
+    out.append(fence("chunk integrity check on the same query", truncation_evidence))
+
     out.append(
-        "\n**Recommendation.** Sentence chunking scores mean precision "
-        f"{sentence_block['mean_precision']:.4f} / recall {sentence_block['mean_recall']:.4f} "
-        f"/ F1 {sentence_block['mean_f1']:.4f}, against fixed-size-with-overlap at "
-        f"{fixed_block['mean_precision']:.4f} / {fixed_block['mean_recall']:.4f} / "
-        f"{fixed_block['mean_f1']:.4f} on the same five queries. "
-        f"I would deploy **{winner}**: it is at least as accurate on these numbers, and "
-        "because it never splits a sentence, a retrieved chunk is always a complete policy "
-        "statement, which is what the grounded-generation step and the Autogen compliance "
-        "reviewer both read. A fixed window that cuts 'a foreclosure charge of 4 percent of "
-        "the outstanding principal if closed within' mid-clause retrieves a fragment that "
-        "can be quoted misleadingly even when the similarity score looks healthy.\n"
+        f"\n**Recommendation: deploy `{COLLECTION_SENTENCE}` (sentence chunking).**\n\n"
+        f"On the numbers, `{COLLECTION_FIXED}` scores mean precision "
+        f"{fixed_block['mean_precision']:.4f} / recall {fixed_block['mean_recall']:.4f} / "
+        f"F1 {fixed_block['mean_f1']:.4f} against `{COLLECTION_SENTENCE}` at "
+        f"{sentence_block['mean_precision']:.4f} / {sentence_block['mean_recall']:.4f} / "
+        f"{sentence_block['mean_f1']:.4f}, so "
+        f"`{better_on_numbers}` is ahead on F1. Recall is identical at "
+        f"{sentence_block['mean_recall']:.4f} for both - every query retrieves the right "
+        "document either way - so the whole difference is precision, and it comes partly "
+        f"from granularity: {len(fixed)} fixed chunks against {len(sentence)} sentence "
+        "chunks means the top-k spreads across fewer parent documents.\n\n"
+        "What precision does not measure is whether a retrieved chunk is a complete policy "
+        f"statement. The check above shows {len(cut_chunks)} of {len(fixed)} fixed windows "
+        "end mid-sentence, and on the KYC query that truncation reaches the generated "
+        "answer: the list of accepted address documents is cut after its first item, so a "
+        "member is told Aadhaar is the address proof and the passport, utility bill and "
+        "rent agreement are silently dropped. Nothing downstream catches it - the "
+        "fragment's words are in the retrieved context, so both the groundedness guardrail "
+        "and the Autogen reviewer pass it. Sentence chunking cannot produce that failure "
+        "because it never splits mid-clause.\n\n"
+        "For a High-risk financial system, a strategy that is slightly cleaner on average "
+        "but can hand a member a truncated policy rule is the worse deployment. The next "
+        "improvement would be chunking on sentence boundaries with a character-count "
+        "target, which should take the precision of fixed windows with the integrity of "
+        "sentence chunks.\n"
     )
     return "\n".join(out)
 

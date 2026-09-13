@@ -191,22 +191,22 @@ validated crew response:
       "doc_id": "kb08_prepayment_penalty",
       "doc_title": "Prepayment and Foreclosure Penalty Rules",
       "chunk_id": "kb08_prepayment_penalty::sent::0",
-      "similarity": 0.481
+      "similarity": 0.7354
     },
     {
       "doc_id": "kb08_prepayment_penalty",
       "doc_title": "Prepayment and Foreclosure Penalty Rules",
       "chunk_id": "kb08_prepayment_penalty::sent::1",
-      "similarity": 0.4064
+      "similarity": 0.7303
     },
     {
       "doc_id": "kb08_prepayment_penalty",
       "doc_title": "Prepayment and Foreclosure Penalty Rules",
       "chunk_id": "kb08_prepayment_penalty::sent::2",
-      "similarity": 0.247
+      "similarity": 0.5938
     }
   ],
-  "r
+  
 
 negative control - an invalid payload is rejected:
   ValidationError raised as expected:
